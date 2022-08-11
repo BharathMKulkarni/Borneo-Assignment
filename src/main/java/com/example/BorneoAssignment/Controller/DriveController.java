@@ -107,7 +107,12 @@ public class DriveController {
         flow.createAndStoreCredential(response, USER_IDENTIFIER_KEY);
     }
 
-
+    /**
+     * Lists all the files in a User's Google Drive account
+     *
+     * @return List of FileDTO objects that will be rendered by the frontend.
+     * @throws IOException If files().list() fails
+     */
     @GetMapping(value = {"/listFiles"}, produces = {"application/json"})
     public @ResponseBody List<FileItemDTO> listFiles() throws IOException {
 
@@ -131,6 +136,14 @@ public class DriveController {
         return resultList;
     }
 
+
+    /**
+     * Searches for the presence of the input query string in all the files
+     *
+     * @return List of FileDTO objects that contains the input query string
+     * @throws IOException If files().list() fails
+     * @throws TikaException, SAXException if TIKA parser fails
+     */
     @GetMapping(value = {"/search"}, produces = {"application/json"})
     public @ResponseBody List<FileItemDTO> searchFilesWithQuery(@RequestParam("q") String q) throws IOException, TikaException, SAXException {
 
@@ -162,17 +175,15 @@ public class DriveController {
     }
 
 
-
-    private boolean searchString(String id, String q) throws IOException, GoogleJsonResponseException, TikaException, SAXException {
-
-        Credential credentials = flow.loadCredential(USER_IDENTIFIER_KEY);
-
-        Drive service = new Drive.Builder(HTTP_TRANSPORT, JSON_FACTORY, credentials)
-                .setApplicationName("BorneoAssignmentApplication").build();
-
+    /**
+     * Searches for a given string in a file given by the fileID
+     *
+     * @return true if the string is present, false otherwise
+     * @throws IOException If files().get() fails
+     * @throws TikaException, SAXException if TIKA parser fails
+     */
+    private boolean searchString(String id, String q) throws IOException, TikaException, SAXException {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-
-
         service.files().get(id).executeMediaAndDownloadTo(outputStream);
         System.out.println(outputStream.toString());
 
@@ -192,7 +203,6 @@ public class DriveController {
         System.out.println("FILE CONTENTS : " + handler.toString());
 
         return outputStream.toString().contains(q);
-
     }
 
 }
