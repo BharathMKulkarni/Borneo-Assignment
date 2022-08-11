@@ -1,38 +1,5 @@
-$("#refreshButton").click( function() {
-    console.log("refresh button triggered");
-    $.ajax({
-        url : "/listFiles"
-    }).done(function(data) {
-        console.dir(data);
-        var listHTML = "";
-        for(file of data){
-            listHTML += `<li>${file.id} : ${file.name}</li>`
-        }
 
-        $("#fileListContainer").html(listHTML);
-    })
-});
-
-// window.onload   = function() {
-
-//     document.getElementById("refreshButton").addEventListener("click", function() {
-//         console.log("refresh button triggered");    
-//     })
-
-//     $.ajax({
-//         url : "/listFiles"
-//     }).done(function(data) {
-//         console.dir(data);
-//         var listHTML = "";
-//         for(file of data){
-//             listHTML += `<li>${file.id} : ${file.name}</li>`
-//         }
-
-//         document.getElementById("fileListContainer").innerHTML = listHTML;
-//     })
-
-// }
-
+// HANDLE THE CLICK OF GET FILES BUTTON
 const refreshButtonHandler = () => {
     console.log("refresh button triggered");
     fetch("https://127.0.0.1.nip.io:8443/listFiles")
@@ -47,6 +14,8 @@ const refreshButtonHandler = () => {
     });
 }
 
+
+// HANDLE CLICK OF SEARCH BUTTON
 const sendQueryHandler = () => {
 
     console.log("send query button triggered");
@@ -67,6 +36,7 @@ const sendQueryHandler = () => {
 
 }
 
+// ATTACHING EVENT LISTENERS ONCE THE PAGE LOADS
 window.onload = function() {
     document.getElementById("refreshButton").addEventListener("click",refreshButtonHandler );
     document.getElementById("sendQuery").addEventListener("click",sendQueryHandler );

@@ -162,11 +162,7 @@ public class DriveController {
             fileItemDTO.setWebContentLink(file.getWebContentLink());
 
             boolean present = false;
-
-            System.out.println("Current File: " + file.getName());
             present = searchString(file.getId(), q);
-            System.out.println(present);
-
 
             if (present && file.getName() != null && file.getWebContentLink() != null)
                 resultList.add(fileItemDTO);
@@ -185,7 +181,6 @@ public class DriveController {
     private boolean searchString(String id, String q) throws IOException, TikaException, SAXException {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         service.files().get(id).executeMediaAndDownloadTo(outputStream);
-        System.out.println(outputStream.toString());
 
         // INITIALIZE TIKA PARSER
         final Parser parser = new AutoDetectParser();
@@ -194,13 +189,10 @@ public class DriveController {
         ParseContext context = new ParseContext();
 
         byte[] bytes = outputStream.toByteArray();
-        System.out.println(bytes.length);
         ByteArrayInputStream inputStream = new ByteArrayInputStream(bytes);
 
         // EXTRACT USING TIKA
         parser.parse(inputStream,handler,metadata, context);
-
-        System.out.println("FILE CONTENTS : " + handler.toString());
 
         return outputStream.toString().contains(q);
     }
