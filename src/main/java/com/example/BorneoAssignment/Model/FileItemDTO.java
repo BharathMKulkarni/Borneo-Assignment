@@ -1,4 +1,4 @@
-package com.example.BorneoAssignment;
+package com.example.BorneoAssignment.Model;
 
 import java.io.Serializable;
 
